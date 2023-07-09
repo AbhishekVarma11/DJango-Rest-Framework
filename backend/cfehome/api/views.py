@@ -1,15 +1,15 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 import json
+from products.models import product
 def api_home(request,*args,**kwargs):
-    body=request.body 
+    
+    model_data=product.objects.all().order_by("?").first()
     data={}
-    try:
-        data=json.loads(body)
-    except:
-        pass
-    print(data)
-    data['headers']=dict(request.headers)
-    data['content_type']=request.content_type
-    print(request.GET)
+    if model_data:
+        data['id']=model_data.id
+        data['title']=model_data.title
+        data['content']=model_data.content 
+        data['price']=model_data.price 
+            
     return JsonResponse(data)
