@@ -1,6 +1,6 @@
 from django.shortcuts import render,get_object_or_404
 
-from rest_framework import generics,mixins
+from rest_framework import authentication,generics,mixins,permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -18,6 +18,8 @@ product_detail_view=ProductDetailAPIView.as_view()
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset=product.objects.all()
     serializer_class=ProductSerializer
+    permission_classes=[permissions.IsAuthenticated]
+    authentication_classes=[authentication.SessionAuthentication]
     
     def perform_create(self,serializer):
         title=serializer.validated_data.get('title')
