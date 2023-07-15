@@ -12,7 +12,7 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
     
 product_detail_view=ProductDetailAPIView.as_view()
 
-class ProductCreateAPIView(generics.CreateAPIView):
+class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset=product.objects.all()
     serializer_class=ProductSerializer
     
@@ -23,4 +23,11 @@ class ProductCreateAPIView(generics.CreateAPIView):
             content=title
         serializer.save(content=content)
     
-product_create_view=ProductCreateAPIView.as_view()
+product_list_create_view=ProductListCreateAPIView.as_view()
+
+# class ProductListAPIView(generics.ListAPIView):
+#     queryset=product.objects.all()
+#     serializer_class=ProductSerializer
+#     #lookup_field='pk'
+    
+# product_list_view=ProductListAPIView.as_view()
