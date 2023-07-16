@@ -37,7 +37,7 @@ product_list_create_view=ProductListCreateAPIView.as_view()
     
 # product_list_view=ProductListAPIView.as_view()
 
-class ProductUpdateAPIView(StaffEditorPermissionMixin,generics.UpdateAPIView,StaffEditorPermissionMixin):
+class ProductUpdateAPIView(generics.UpdateAPIView,StaffEditorPermissionMixin):
     queryset=product.objects.all()
     serializer_class=ProductSerializer
     lookup_field='pk'   
