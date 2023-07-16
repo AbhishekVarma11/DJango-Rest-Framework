@@ -3,7 +3,7 @@ from django.shortcuts import render,get_object_or_404
 from rest_framework import authentication,generics,mixins,permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
+from api.authentication import TokenAuthentication
 
 from .models import product
 from .serializers import ProductSerializer
@@ -19,7 +19,8 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset=product.objects.all()
     serializer_class=ProductSerializer
     permission_classes=[permissions.IsAuthenticated]
-    authentication_classes=[authentication.SessionAuthentication]
+    authentication_classes=[authentication.SessionAuthentication,TokenAuthentication]
+    
     
     def perform_create(self,serializer):
         title=serializer.validated_data.get('title')
@@ -41,6 +42,8 @@ class ProductUpdateAPIView(generics.UpdateAPIView):
     queryset=product.objects.all()
     serializer_class=ProductSerializer
     lookup_field='pk'
+    permission_classes=[permissions.IsAuthenticated]
+    authentication_classes=[authentication.SessionAuthentication,TokenAuthentication]
     
     def perform_update(self, serializer):
         instance=serializer.save()
