@@ -1,10 +1,10 @@
 from django.shortcuts import render,get_object_or_404
 
-from rest_framework import authentication,generics,mixins,permissions
+from rest_framework import generics,mixins
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from api.authentication import TokenAuthentication
-
+from api.mixins import StaffEditorPermissionMixin
 from .models import product
 from .serializers import ProductSerializer
 
@@ -15,11 +15,10 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
     
 product_detail_view=ProductDetailAPIView.as_view()
 
-class ProductListCreateAPIView(generics.ListCreateAPIView):
+class ProductListCreateAPIView(generics.ListCreateAPIView,StaffEditorPermissionMixin):
     queryset=product.objects.all()
     serializer_class=ProductSerializer
-    permission_classes=[permissions.IsAuthenticated]
-    authentication_classes=[authentication.SessionAuthentication,TokenAuthentication]
+    
     
     
     def perform_create(self,serializer):
@@ -38,13 +37,10 @@ product_list_create_view=ProductListCreateAPIView.as_view()
     
 # product_list_view=ProductListAPIView.as_view()
 
-class ProductUpdateAPIView(generics.UpdateAPIView):
+class ProductUpdateAPIView(StaffEditorPermissionMixin,generics.UpdateAPIView,StaffEditorPermissionMixin):
     queryset=product.objects.all()
     serializer_class=ProductSerializer
-    lookup_field='pk'
-    permission_classes=[permissions.IsAuthenticated]
-    authentication_classes=[authentication.SessionAuthentication,TokenAuthentication]
-    
+    lookup_field='pk'   
     def perform_update(self, serializer):
         instance=serializer.save()
         if not instance.content:
